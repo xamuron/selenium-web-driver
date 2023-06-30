@@ -34,6 +34,7 @@ public class LoginTest {
         driver.get("http://localhost/litecart/admin/");
         driver.findElement(By.name("username")).sendKeys(login);
         driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.name("login")).click();
     }
 
     @AfterAll
