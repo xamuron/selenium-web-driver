@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.By;
+import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -35,6 +36,8 @@ public class LoginTest {
         driver.findElement(By.name("username")).sendKeys(login);
         driver.findElement(By.name("password")).sendKeys(password);
         driver.findElement(By.name("login")).click();
+
+        System.out.println(((HasCapabilities) driver).getCapabilities());
     }
 
     @AfterAll
