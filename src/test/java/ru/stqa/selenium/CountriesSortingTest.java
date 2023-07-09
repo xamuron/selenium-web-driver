@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -49,44 +48,6 @@ public class CountriesSortingTest {
 
     @Test
     public void countriesSortingTest() {
-        driver.get("http://localhost/litecart/admin");
-        login(adminLogin, adminPassword);
-        driver.get("http://localhost/litecart/admin/?app=countries&doc=countries");
-
-        List<WebElement> countriesElements = driver.findElements(By.cssSelector("tr.row"));
-        List<String> countries = new ArrayList<>();
-        for (WebElement element : countriesElements) {
-            countries.add(element.findElement(By.xpath("./td[5]/a")).getText());
-            // если у элементы страны есть Зоны, проваливаемся в страну и проверяем сортировку Зон
-            if (hasZone(element)) {
-                element.findElement(By.xpath(".//a")).click();
-
-                List<WebElement> zonesElements = driver.findElements(By.cssSelector("table#table-zones tr"));
-                // не учитываем хедер и последнюю строку с инпутом добавления зон
-                zonesElements.remove(0);
-                zonesElements.remove(zonesElements.size() - 1);
-                List<String> zones = new ArrayList<>();
-
-                for (WebElement elem:zonesElements) {
-                    zones.add(elem.findElement(By.xpath("./td[3]")).getText());
-                }
-                List<String> sortedZones = zones;
-                Collections.sort(sortedZones);
-                //проверям, что зоны отсортированы по алфавиту
-                Assertions.assertArrayEquals(sortedZones.toArray(), zones.toArray());
-                driver.navigate().back();
-                driver.navigate().refresh();
-            }
-        }
-        List<String> sortedCountries = countries;
-        Collections.sort(sortedCountries);
-
-        //проверям, что страны отсортированы по алфавиту
-        Assertions.assertArrayEquals(sortedCountries.toArray(), countries.toArray());
-    }
-
-    @Test
-    public void countriesSortingTest2() {
         driver.get("http://localhost/litecart/admin");
         login(adminLogin, adminPassword);
         driver.get("http://localhost/litecart/admin/?app=countries&doc=countries");
