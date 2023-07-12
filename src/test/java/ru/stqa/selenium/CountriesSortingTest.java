@@ -48,7 +48,6 @@ public class CountriesSortingTest {
 
     @Test
     public void countriesSortingTest() {
-        driver.get("http://localhost/litecart/admin");
         login(adminLogin, adminPassword);
         driver.get("http://localhost/litecart/admin/?app=countries&doc=countries");
 
@@ -56,10 +55,10 @@ public class CountriesSortingTest {
         List<String> countries = new ArrayList<>();
 
         for (int i = 0; i < countriesElements.size() - 1; i++) {
-            countries.add(driver.findElements(By.cssSelector("tr.row")).get(i).findElement(By.xpath("./td[5]/a")).getText());
+            countries.add(countriesElements.get(i).findElement(By.xpath("./td[5]/a")).getText());
             // если у элементы страны есть Зоны, проваливаемся в страну и проверяем сортировку Зон
-            if (hasZone(driver.findElements(By.cssSelector("tr.row")).get(i))) {
-                driver.findElements(By.cssSelector("tr.row")).get(i).findElement(By.xpath(".//a")).click();
+            if (hasZone(countriesElements.get(i))) {
+                countriesElements.get(i).findElement(By.xpath(".//a")).click();
 
                 List<WebElement> zonesElements = driver.findElements(By.cssSelector("table#table-zones tr"));
                 // не учитываем хедер и последнюю строку с инпутом добавления зон
@@ -70,19 +69,23 @@ public class CountriesSortingTest {
                 for (WebElement elem:zonesElements) {
                     zones.add(elem.findElement(By.xpath("./td[3]")).getText());
                 }
-                List<String> sortedZones = zones;
+                List<String> sortedZones = new ArrayList<>();
+                sortedZones.addAll(zones);
                 Collections.sort(sortedZones);
+
                 //проверям, что зоны отсортированы по алфавиту
                 Assertions.assertArrayEquals(sortedZones.toArray(), zones.toArray());
                 driver.navigate().back();
-                driver.navigate().refresh();
+                // получаем заново список элементов стран после загрузки новый страницы
+                countriesElements = driver.findElements(By.cssSelector("tr.row"));
             }
-            List<String> sortedCountries = countries;
-            Collections.sort(sortedCountries);
-
-            //проверям, что страны отсортированы по алфавиту
-            Assertions.assertArrayEquals(sortedCountries.toArray(), countries.toArray());
         }
+        List<String> sortedCountries = new ArrayList<>();
+        sortedCountries.addAll(countries);
+        Collections.sort(sortedCountries);
+
+        //проверям, что страны отсортированы по алфавиту
+        Assertions.assertArrayEquals(sortedCountries.toArray(), countries.toArray());
     }
 
     @AfterAll
