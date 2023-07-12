@@ -64,7 +64,8 @@ public class GeoZonesSortingTest {
                 geoZones.add(element.findElement(By.xpath(".//td[3]/select/option[@selected]")).getText());
             }
             // получаем отсортированный список зон
-            List<String> sortedGeoZones = geoZones;
+            List<String> sortedGeoZones = new ArrayList<>();
+            sortedGeoZones.addAll(geoZones);
             Collections.sort(sortedGeoZones);
 
             Assertions.assertArrayEquals(sortedGeoZones.toArray(), geoZones.toArray());
